@@ -1,0 +1,8 @@
+{
+  "extends": ["next/core-web-vitals", "standard"],
+  "rules": {
+    "space-before-function-paren": "off",
+    "multiline-ternary": "off"
+  },
+  "ignorePatterns": ["/lib/types/supabase.ts"]
+}
