@@ -3,17 +3,18 @@
 import FilledButton from '@/src/components/atoms/Button/FilledButton'
 import TextButton from '@/src/components/atoms/Button/TextButton'
 import Table from '@/src/components/organisms/Table'
-import useGetCredentials from '@/src/lib/adapters/Query/Credentials'
-import useUserProvider from '@/src/lib/providers/UserProvider'
+import { useGetAllCredentials } from '@/src/lib/adapters/Query/Credentials'
 import { getCredentialDates } from '@/src/lib/utils/getCredentialDates'
-import React from 'react'
+import React, { useState } from 'react'
 import { FiDownload } from 'react-icons/fi'
 
 const CredentialsPage = () => {
-  const user = useUserProvider((state) => state.user)
-  const userId = user?.id
-
-  const { data } = useGetCredentials({ userId })
+  const { data, refetch } = useGetAllCredentials()
+  const [query, setQuery] = useState({
+    limit: 10,
+    offset: 0,
+    search: ''
+  })
 
   console.log('data', data)
   return (
@@ -65,6 +66,14 @@ const CredentialsPage = () => {
             ]
           }
         })}
+        refetch={refetch}
+        onPaginate={(from, to) => {
+          setQuery({
+            ...query,
+            limit: to,
+            offset: from
+          })
+        }}
       />
     </div>
   )

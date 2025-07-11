@@ -9,8 +9,8 @@ import {
   IoHelpCircleOutline,
   IoLogOutOutline,
   IoCardOutline,
-  IoTrophyOutline,
-  IoDocumentOutline
+  IoDocumentOutline,
+  IoAddCircleOutline
 
 } from 'react-icons/io5'
 import { useGlobalStore } from '../../_state/provider'
@@ -23,8 +23,8 @@ const menuItems = [
   { name: 'Documents', route: '/menu/documents', icon: IoDocumentOutline },
   { name: 'Credentials', route: '/menu/credentials', icon: IoCardOutline },
   { name: 'Profile', route: '/menu/profile', icon: IoPersonOutline },
-  { name: 'Benefits', route: '/menu/benefits', icon: IoTrophyOutline },
   { name: 'Settings', route: '/menu/settings', icon: IoSettingsOutline },
+  { name: 'Create Citizen', route: '/menu/register-citizen', icon: IoAddCircleOutline },
   { name: 'Help', route: '/menu/help', icon: IoHelpCircleOutline }
 ]
 

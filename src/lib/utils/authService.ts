@@ -8,5 +8,13 @@ export async function loginUser({ email, password }: LoginInput) {
   })
 
   if (error) throw new Error(error.message)
+
+  const user = data.user
+  const role = user?.app_metadata?.role
+
+  if (role !== 'admin') {
+    throw new Error('You do not have permissions to access the backoffice.')
+  }
+
   return data
 }

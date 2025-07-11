@@ -69,7 +69,7 @@ export default function ForgotPasswordPage() {
         className='font-black absolute top-3 left-3 text-sm text-indigo-600 hover:text-indigo-500'
         onClick={handleBack}
       >
-        ← Volver atrás
+        ← Back
       </button>
       <div className='max-w-md w-full space-y-4'>
         <div className='flex justify-center'>

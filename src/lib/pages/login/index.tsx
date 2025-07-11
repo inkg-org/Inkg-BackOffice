@@ -53,7 +53,7 @@ export default function LoginPage() {
   }
 
   const handleRegister = () => {
-    router.push('/register')
+    window.open('https://inkg-front-end.vercel.app/login', '_blank')
   }
 
   return (
@@ -62,7 +62,7 @@ export default function LoginPage() {
         <LottieBackground />
       </div>
 
-      <div className='max-w-md w-full space-y-4 z-30'>
+      <div className='max-w-lg w-full space-y-4 z-30'>
         <div className='flex justify-center'>
           <Image
             src={publicPaths.identity.logo}
@@ -72,7 +72,7 @@ export default function LoginPage() {
           />
         </div>
         <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-700'>
-          Login for citizens
+          Ierahkwa Ne Kanienke Back Office
         </h2>
 
         <p className='mt-2 text-center text-sm text-gray-600'>
@@ -126,7 +126,7 @@ export default function LoginPage() {
                 className='underline mt-3 text-center font-black text-sm text-indigo-700 hover:text-indigo-400 cursor-pointer'
                 onClick={handleRegister}
               >
-                Don&apos;t have an account? Become a Citizen
+                Are you a citizen? log in to your account
               </p>
               <p
                 className='underline mt-10 text-sm text-indigo-700 hover:text-indigo-400 cursor-pointer'

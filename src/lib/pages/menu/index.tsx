@@ -6,13 +6,11 @@ import React from 'react'
 import {
   IoCardOutline,
   IoDocumentOutline,
-  IoHelpCircleOutline,
   IoPersonOutline,
-  IoSettingsOutline,
-  IoTrophyOutline
+  IoSettingsOutline
 } from 'react-icons/io5'
 import useUserProvider from '@/src/lib/providers/UserProvider'
-import useGetProfile from '../../adapters/Query/Profile'
+import { useGetProfile } from '../../adapters/Query/Profile'
 import LottieLoader from '@/src/components/atoms/Lottie/LottieLoader'
 import Image, { StaticImageData } from 'next/image'
 import publicPaths from '../../images'
@@ -39,32 +37,22 @@ interface MenuItemsProps {
 
 const MenuItems: MenuItemsProps[] = [
   {
+    name: 'Citizens',
+    route: '/profile',
+    icon: IoPersonOutline,
+    key: 'customer',
+    description:
+      'Shows all the personal information linked to the citizens and his accounts.',
+    image: publicPaths.assets.profileBanner
+  },
+  {
     name: 'Credentials',
     route: '/credentials',
     icon: IoCardOutline,
     key: 'companies',
     description:
-      'Allows you to accedd to all the credentials of you citizenship.',
+      'Allows you to access and manage all the credentials of the citizens.',
     image: publicPaths.assets.credentialBanner
-  },
-  {
-    name: 'Profile',
-    route: '/profile',
-    icon: IoPersonOutline,
-    key: 'customer',
-    description:
-      'Shows all the personal information linked to your citizenship.',
-    image: publicPaths.assets.profileBanner
-  },
-
-  {
-    name: 'Benefits',
-    route: '/benefits',
-    icon: IoTrophyOutline,
-    key: 'vehicles',
-    description:
-      'Access all the benefits you’re entitled to as a citizen of Ierahkwa Ne Kanienke.',
-    image: publicPaths.assets.benefitsBanner
   },
   {
     name: 'Settings',
@@ -83,15 +71,6 @@ const MenuItems: MenuItemsProps[] = [
     description:
       'Find all your official documents, legal proofs, and certificates in one secure place.',
     image: publicPaths.assets.documentsBanner
-  },
-  {
-    name: 'Help',
-    route: '/help',
-    icon: IoHelpCircleOutline,
-    key: 'help',
-    description:
-      'Get guidance and support for any citizenship-related issue.',
-    image: publicPaths.assets.helpBanner
   }
 ]
 
@@ -99,7 +78,7 @@ export default function MenuPage() {
   const user = useUserProvider((state) => state.user)
   const userId = user?.id
 
-  const { data: profile, isLoading } = useGetProfile({ userId })
+  const { data: profile, isLoading } = useGetProfile(userId)
 
   if (isLoading) return <LottieLoader />
   return (

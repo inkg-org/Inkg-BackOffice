@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable quotes */
 export type Json =
   | string
   | number
@@ -9,6 +7,11 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instanciate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "12.2.3 (519615d)"
+  }
   public: {
     Tables: {
       credentials: {
@@ -20,7 +23,7 @@ export type Database = {
           concealed_weapon_issue_date: string | null
           concealed_weapon_Qrcode: string
           created_at: string
-          credential_name: Database['public']['Enums']['credentials_types']
+          credential_name: Database["public"]["Enums"]["credentials_types"]
           diplomatic_passport_DAN: string
           diplomatic_passport_discriminator: string
           diplomatic_passport_expiration_date: string | null
@@ -83,6 +86,15 @@ export type Database = {
           official_passport_number: string
           official_passport_position: string
           official_passport_Qrcode: string
+          passport_card_discriminator: string
+          passport_card_expiration_date: string | null
+          passport_card_initial_year: string
+          passport_card_issue_date: string | null
+          passport_card_MRZLine1: string
+          passport_card_MRZLine2: string
+          passport_card_MRZLine3: string
+          passport_card_number: string
+          passport_card_Qrcode: string
           profile_id: string
         }
         Insert: {
@@ -93,7 +105,7 @@ export type Database = {
           concealed_weapon_issue_date?: string | null
           concealed_weapon_Qrcode?: string
           created_at?: string
-          credential_name: Database['public']['Enums']['credentials_types']
+          credential_name: Database["public"]["Enums"]["credentials_types"]
           diplomatic_passport_DAN?: string
           diplomatic_passport_discriminator?: string
           diplomatic_passport_expiration_date?: string | null
@@ -156,6 +168,15 @@ export type Database = {
           official_passport_number?: string
           official_passport_position?: string
           official_passport_Qrcode?: string
+          passport_card_discriminator?: string
+          passport_card_expiration_date?: string | null
+          passport_card_initial_year?: string
+          passport_card_issue_date?: string | null
+          passport_card_MRZLine1?: string
+          passport_card_MRZLine2?: string
+          passport_card_MRZLine3?: string
+          passport_card_number?: string
+          passport_card_Qrcode?: string
           profile_id: string
         }
         Update: {
@@ -166,7 +187,7 @@ export type Database = {
           concealed_weapon_issue_date?: string | null
           concealed_weapon_Qrcode?: string
           created_at?: string
-          credential_name?: Database['public']['Enums']['credentials_types']
+          credential_name?: Database["public"]["Enums"]["credentials_types"]
           diplomatic_passport_DAN?: string
           diplomatic_passport_discriminator?: string
           diplomatic_passport_expiration_date?: string | null
@@ -229,16 +250,25 @@ export type Database = {
           official_passport_number?: string
           official_passport_position?: string
           official_passport_Qrcode?: string
+          passport_card_discriminator?: string
+          passport_card_expiration_date?: string | null
+          passport_card_initial_year?: string
+          passport_card_issue_date?: string | null
+          passport_card_MRZLine1?: string
+          passport_card_MRZLine2?: string
+          passport_card_MRZLine3?: string
+          passport_card_number?: string
+          passport_card_Qrcode?: string
           profile_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'credentials_profile_id_fkey'
-            columns: ['profile_id']
+            foreignKeyName: "credentials_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: 'profile'
-            referencedColumns: ['id']
-          }
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       profile: {
@@ -248,15 +278,16 @@ export type Database = {
           birth_place: string
           certificate_number: string
           city: string
-          clan: Database['public']['Enums']['clan'] | null
+          clan: Database["public"]["Enums"]["clan"] | null
           clan_image: string
           country: string
           created_at: string
           DOB_short: string
-          eye_color: Database['public']['Enums']['eye_color']
+          eye_color: Database["public"]["Enums"]["eye_color"]
+          fingerprints: string
           first_name: string
-          gender: Database['public']['Enums']['gender']
-          hair_color: Database['public']['Enums']['hair_color'] | null
+          gender: Database["public"]["Enums"]["gender"]
+          hair_color: Database["public"]["Enums"]["hair_color"] | null
           has_CDLD_driver_license: boolean | null
           has_concealed_carry: boolean | null
           has_diplomatic_passport: boolean | null
@@ -277,7 +308,7 @@ export type Database = {
           secondary_address: string
           sign: string
           state: string
-          weigth: number
+          weight: number
           zip_code: number
         }
         Insert: {
@@ -286,15 +317,16 @@ export type Database = {
           birth_place?: string
           certificate_number?: string
           city?: string
-          clan?: Database['public']['Enums']['clan'] | null
+          clan?: Database["public"]["Enums"]["clan"] | null
           clan_image?: string
           country?: string
           created_at?: string
           DOB_short?: string
-          eye_color?: Database['public']['Enums']['eye_color']
+          eye_color?: Database["public"]["Enums"]["eye_color"]
+          fingerprints?: string
           first_name?: string
-          gender?: Database['public']['Enums']['gender']
-          hair_color?: Database['public']['Enums']['hair_color'] | null
+          gender?: Database["public"]["Enums"]["gender"]
+          hair_color?: Database["public"]["Enums"]["hair_color"] | null
           has_CDLD_driver_license?: boolean | null
           has_concealed_carry?: boolean | null
           has_diplomatic_passport?: boolean | null
@@ -315,7 +347,7 @@ export type Database = {
           secondary_address?: string
           sign?: string
           state?: string
-          weigth?: number
+          weight?: number
           zip_code?: number
         }
         Update: {
@@ -324,15 +356,16 @@ export type Database = {
           birth_place?: string
           certificate_number?: string
           city?: string
-          clan?: Database['public']['Enums']['clan'] | null
+          clan?: Database["public"]["Enums"]["clan"] | null
           clan_image?: string
           country?: string
           created_at?: string
           DOB_short?: string
-          eye_color?: Database['public']['Enums']['eye_color']
+          eye_color?: Database["public"]["Enums"]["eye_color"]
+          fingerprints?: string
           first_name?: string
-          gender?: Database['public']['Enums']['gender']
-          hair_color?: Database['public']['Enums']['hair_color'] | null
+          gender?: Database["public"]["Enums"]["gender"]
+          hair_color?: Database["public"]["Enums"]["hair_color"] | null
           has_CDLD_driver_license?: boolean | null
           has_concealed_carry?: boolean | null
           has_diplomatic_passport?: boolean | null
@@ -353,7 +386,7 @@ export type Database = {
           secondary_address?: string
           sign?: string
           state?: string
-          weigth?: number
+          weight?: number
           zip_code?: number
         }
         Relationships: []
@@ -366,42 +399,46 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      blood_type: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-'
-      clan: 'Bear Clan' | 'Wolf Clan' | 'Turtle Clan'
+      blood_type: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-"
+      clan: "Bear Clan" | "Wolf Clan" | "Turtle Clan"
       credentials_types:
-        | 'Identification Card'
-        | 'Passport Card'
-        | 'Driver License Card'
-        | 'Diplomatic Passport Card'
-        | 'Official Passport Card'
-        | 'Medical Cannabis Patient Card'
-        | 'Medical Mushroom Patient Card'
-        | 'Concealed Weapon or Firearm License'
-        | 'Fish And Game License Card'
+        | "Identification Card"
+        | "Passport Card"
+        | "Driver License Card"
+        | "Diplomatic Passport Card"
+        | "Official Passport Card"
+        | "Medical Cannabis Patient Card"
+        | "Medical Mushroom Patient Card"
+        | "Concealed Weapon or Firearm License"
+        | "Fish And Game License Card"
+      document_type:
+        | "Adoption Certificate"
+        | "Probationary Certificate"
+        | "Resident Certificate"
       eye_color:
-        | 'BLK'
-        | 'BLU'
-        | 'BRO'
-        | 'GRY'
-        | 'GRN'
-        | 'HAZ'
-        | 'MAR'
-        | 'PNK'
-        | 'DIC'
-        | 'UNK'
-      gender: 'Male' | 'Female' | 'Other'
+        | "BLK"
+        | "BLU"
+        | "BRO"
+        | "GRY"
+        | "GRN"
+        | "HAZ"
+        | "MAR"
+        | "PNK"
+        | "DIC"
+        | "UNK"
+      gender: "Male" | "Female" | "Other"
       hair_color:
-        | 'BAL'
-        | 'BLK'
-        | 'BLN'
-        | 'BRO'
-        | 'GRY'
-        | 'RED'
-        | 'SDY'
-        | 'WHI'
-        | 'UNK'
-        | 'BLU'
-        | 'GRN'
+        | "BAL"
+        | "BLK"
+        | "BLN"
+        | "BRO"
+        | "GRY"
+        | "RED"
+        | "SDY"
+        | "WHI"
+        | "UNK"
+        | "BLU"
+        | "GRN"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -409,29 +446,33 @@ export type Database = {
   }
 }
 
-type DefaultSchema = Database[Extract<keyof Database, 'public'>]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
-    | { schema: keyof Database },
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (Database[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-        Database[DefaultSchemaTableNameOrOptions['schema']]['Views'])
-    : never = never
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-      Database[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] &
-        DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] &
-        DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -440,21 +481,23 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
-    | { schema: keyof Database },
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions['schema']]['Tables']
-    : never = never
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -463,21 +506,23 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
-    | { schema: keyof Database },
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions['schema']]['Tables']
-    : never = never
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -486,76 +531,85 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
-    | { schema: keyof Database },
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
-    : never = never
-> = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
-    | { schema: keyof Database },
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
-    : never = never
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {
   public: {
     Enums: {
-      blood_type: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-      clan: ['Bear Clan', 'Wolf Clan', 'Turtle Clan'],
+      blood_type: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+      clan: ["Bear Clan", "Wolf Clan", "Turtle Clan"],
       credentials_types: [
-        'Identification Card',
-        'Passport Card',
-        'Driver License Card',
-        'Diplomatic Passport Card',
-        'Official Passport Card',
-        'Medical Cannabis Patient Card',
-        'Medical Mushroom Patient Card',
-        'Concealed Weapon or Firearm License',
-        'Fish And Game License Card'
+        "Identification Card",
+        "Passport Card",
+        "Driver License Card",
+        "Diplomatic Passport Card",
+        "Official Passport Card",
+        "Medical Cannabis Patient Card",
+        "Medical Mushroom Patient Card",
+        "Concealed Weapon or Firearm License",
+        "Fish And Game License Card",
+      ],
+      document_type: [
+        "Adoption Certificate",
+        "Probationary Certificate",
+        "Resident Certificate",
       ],
       eye_color: [
-        'BLK',
-        'BLU',
-        'BRO',
-        'GRY',
-        'GRN',
-        'HAZ',
-        'MAR',
-        'PNK',
-        'DIC',
-        'UNK'
+        "BLK",
+        "BLU",
+        "BRO",
+        "GRY",
+        "GRN",
+        "HAZ",
+        "MAR",
+        "PNK",
+        "DIC",
+        "UNK",
       ],
-      gender: ['Male', 'Female', 'Other'],
+      gender: ["Male", "Female", "Other"],
       hair_color: [
-        'BAL',
-        'BLK',
-        'BLN',
-        'BRO',
-        'GRY',
-        'RED',
-        'SDY',
-        'WHI',
-        'UNK',
-        'BLU',
-        'GRN'
-      ]
-    }
-  }
+        "BAL",
+        "BLK",
+        "BLN",
+        "BRO",
+        "GRY",
+        "RED",
+        "SDY",
+        "WHI",
+        "UNK",
+        "BLU",
+        "GRN",
+      ],
+    },
+  },
 } as const

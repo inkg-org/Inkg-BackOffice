@@ -3,34 +3,37 @@ import { useQuery } from '@tanstack/react-query'
 
 const supabase = createClient()
 
-export interface getProfileParams {
-  userId: string | undefined | null
+export async function getAllProfiles() {
+  const { data, error } = await supabase.from('profile').select('*')
+  if (error) throw error
+  return data
 }
-export async function getProfile(params: getProfileParams) {
-  const { userId } = params
 
-  if (!userId) return
+export function useGetAllProfiles() {
+  return useQuery({
+    queryKey: ['allProfiles'],
+    queryFn: getAllProfiles
+  })
+}
 
+export async function getProfile(userId: string) {
   const { data, error } = await supabase
     .from('profile')
     .select('*')
     .eq('id', userId)
     .single()
 
-  if (error) {
-    throw error
-  }
-
+  if (error) throw error
   return data
 }
 
-export interface useGetProfileProps {
-  userId: string | undefined | null
-}
-export default function useGetProfile({ userId }: useGetProfileProps) {
+export function useGetProfile(userId: string | undefined | null) {
   return useQuery({
     queryKey: ['profile', userId],
-    queryFn: () => getProfile({ userId }),
+    queryFn: () => {
+      if (!userId) throw new Error('No user ID provided')
+      return getProfile(userId)
+    },
     enabled: !!userId
   })
 }
