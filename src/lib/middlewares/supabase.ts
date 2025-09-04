@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
-import config from '../../config'
+import config from '../config'
 
 // IMPORTANT: Middleware from supabase docs, see https://supabase.com/docs/guides/auth/server-side/nextjs
 // Cookies object was also modified to work with Next.js new cookies API
