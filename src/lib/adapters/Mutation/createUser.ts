@@ -1,41 +1,19 @@
-import { createClient } from '@/src/lib/utils/supabase/client'
-import { CreateUserSchema } from '../../types/createUser'
-
-const supabase = createClient()
+import { CreateUserSchema } from '@/src/lib/types/createUser'
 
 export async function createUser(formData: CreateUserSchema) {
-  const { email, password, role, ...profileData } = formData
-
-  const { data: userResponse, error: signUpError } =
-    await supabase.auth.admin.createUser({
-      email,
-      password,
-      user_metadata: {
-        role
-      }
-    })
-
-  if (signUpError || !userResponse?.user?.id) {
-    throw new Error(signUpError?.message || 'Error creating user')
-  }
-
-  const userId = userResponse.user.id
-
-  console.log('Payload to insert:', {
-    user_id: userId,
-    ...profileData
+  const response = await fetch('/api/create-user', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
   })
 
-  const { error: profileError } = await supabase.from('profile').insert([
-    {
-      user_id: userId,
-      ...profileData
-    }
-  ])
+  const data = await response.json()
 
-  if (profileError) {
-    throw new Error(profileError.message)
+  if (!response.ok) {
+    throw new Error(data.error || 'Error creating user')
   }
 
-  return { message: 'User successfully created', userId }
+  return data
 }

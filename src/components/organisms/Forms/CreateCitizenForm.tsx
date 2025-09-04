@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { createUserSchema, CreateUserSchema } from '@/src/lib/types/createUser'
 import { createUser } from '@/src/lib/adapters/Mutation/createUser'
-import { input } from './Styles'
+import { input, label } from './Styles'
 
 export default function CreateCitizenForm() {
   const [success, setSuccess] = useState(false)
@@ -17,7 +17,8 @@ export default function CreateCitizenForm() {
     formState: { errors },
     reset
   } = useForm<CreateUserSchema>({
-    resolver: zodResolver(createUserSchema)
+    resolver: zodResolver(createUserSchema),
+    mode: 'onChange'
   })
 
   const mutation = useMutation({
@@ -39,48 +40,89 @@ export default function CreateCitizenForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
       <h3 className='font-bold text-xl'>Access Information</h3>
-      <div className='grid grid-cols-2 gap-4'>
-        <input
-          {...register('email')}
-          placeholder='Email'
-          className={` ${input}`}
-        />
-        <input
-          {...register('password')}
-          placeholder='Password'
-          type='password'
-          className={` ${input}`}
-        />
+      <div className='grid grid-cols-3 gap-4'>
+        <div className='w-full'>
+          <label className={` ${label}`}>Email</label>
+          <input
+            {...register('email')}
+            placeholder='Mail@example.com'
+            className={`${input} ${errors.email ? 'border-red-500' : ''}`}
+          />
+          {errors.email && (
+            <p className='text-red-500 text-sm'>{errors.email.message}</p>
+          )}
+        </div>
+        <div>
+          <label className={` ${label}`}>Password</label>
+          <input
+            {...register('password')}
+            placeholder='Password'
+            type='password'
+            className={` ${input}`}
+          />
+          {errors.password && (
+            <p className='text-red-500 text-sm'>{errors.password.message}</p>
+          )}
+        </div>
+        <div>
+          <label className={` ${label}`}>Role</label>
+          <select {...register('role')} className={` ${input}`}>
+            <option value=''>Select role</option>
+            <option value='citizen'>Citizen</option>
+            <option value='admin'>Admin</option>
+          </select>
+          {errors.role && (
+            <p className='text-red-500 text-sm'>{errors.role.message}</p>
+          )}
+        </div>
       </div>
       <h3 className='font-bold text-xl'>Citizen Information</h3>
       <div className='grid grid-cols-3 gap-4'>
-        <input
-          {...register('first_name')}
-          placeholder='First Name'
-          className={` ${input}`}
-        />
-        <input
-          {...register('middle_name')}
-          placeholder='Middle Name'
-          className={` ${input}`}
-        />
-        <input
-          {...register('last_name')}
-          placeholder='Last Name'
-          className={` ${input}`}
-        />
+        <div>
+          <label className={` ${label}`}>First Name</label>
+          <input
+            {...register('first_name')}
+            placeholder='First Name'
+            className={` ${input}`}
+          />
+          {errors.role && (
+            <p className='text-red-500 text-sm'>{errors.first_name?.message}</p>
+          )}
+        </div>
+        <div>
+          <label className={` ${label}`}>Middle Name</label>
+          <input
+            {...register('middle_name')}
+            placeholder='Middle Name'
+            className={` ${input}`}
+          />
+        </div>
+        <div>
+          <label className={` ${label}`}>Last Name</label>
+          <input
+            {...register('last_name')}
+            placeholder='Last Name'
+            className={` ${input}`}
+          />
+        </div>
       </div>
       <div className='grid grid-cols-2 gap-4'>
-        <input
-          {...register('address')}
-          placeholder='Address'
-          className={` ${input}`}
-        />
-        <input
-          {...register('secondary_address')}
-          placeholder='Secondary Address'
-          className={` ${input}`}
-        />
+        <div>
+          <label className={` ${label}`}>Address</label>
+          <input
+            {...register('address')}
+            placeholder='Address'
+            className={` ${input}`}
+          />
+        </div>
+        <div>
+          <label className={` ${label}`}>Secondary Address</label>
+          <input
+            {...register('secondary_address')}
+            placeholder='Secondary Address'
+            className={` ${input}`}
+          />
+        </div>
       </div>
       <div className='grid grid-cols-4 gap-4'>
         <input
@@ -120,7 +162,7 @@ export default function CreateCitizenForm() {
         <input
           {...register('birth')}
           placeholder='Birthdate'
-          type='date'
+          type='text'
           className={` ${input}`}
         />
         <input
@@ -230,7 +272,7 @@ export default function CreateCitizenForm() {
 
       <button
         type='submit'
-        className='px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'
+        className='px-6 py-4 bg-blue-600 text-white rounded hover:bg-blue-900 w-full'
         disabled={mutation.isPending}
       >
         {mutation.isPending ? 'Creating...' : 'Create User'}
