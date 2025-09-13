@@ -1,3 +1,4 @@
+'use client'
 import { cn } from '@/src/lib/utils/cn'
 import React, { useEffect, useRef, useState } from 'react'
 import { Control, useController } from 'react-hook-form'
