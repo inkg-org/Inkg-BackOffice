@@ -1,7 +1,7 @@
-import { createClient } from '@/src/lib/utils/supabase/server'
+import { createServerSupabaseClient } from '@/src/lib/utils/supabase/server'
 
 export async function POST(request: Request) {
-  const supabase = createClient()
+  const supabase = createServerSupabaseClient()
 
   const { firstName, lastName, email, password, repeatPassword } =
     await request.json()

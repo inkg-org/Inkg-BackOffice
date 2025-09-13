@@ -1,7 +1,9 @@
+import { createClient } from '@/src/lib/utils/supabase/client'
 import { LoginInput } from '../types/auth'
-import { supabase } from './supabase'
 
 export async function loginUser({ email, password }: LoginInput) {
+  const supabase = createClient()
+
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password

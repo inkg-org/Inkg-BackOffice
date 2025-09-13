@@ -2,7 +2,9 @@
 
 import { useEffect } from 'react'
 import useUserProvider from '.'
-import { supabase } from '../../utils/supabase'
+import { createClient } from '@/src/lib/utils/supabase/client'
+
+const supabase = createClient()
 
 const UserStoreHydration = () => {
   const setUser = useUserProvider((state) => state.setUser)
@@ -23,8 +25,10 @@ const UserStoreHydration = () => {
       }
     )
 
-    return () => subscription.subscription.unsubscribe()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      subscription.subscription.unsubscribe()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return null

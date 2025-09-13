@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
-import { createClient } from '../lib/utils/supabase/server'
 import LoadingScaffold from '../components/molecules/LoadingScaffold'
 import { redirect } from 'next/navigation'
+import { createServerSupabaseClient } from '../lib/utils/supabase/server'
 
 export default function Page() {
-  const supabase = createClient()
+  const supabase = createServerSupabaseClient()
   const response = supabase.auth.getSession()
 
   return (

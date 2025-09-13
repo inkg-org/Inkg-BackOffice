@@ -1,25 +1,28 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import config from '../../config'
+import { Database } from '../../types/supabase'
 
-export function createClient() {
+export function createServerSupabaseClient() {
   const cookieStore = cookies()
 
-  return createServerClient(config.supabaseUrl, config.supabaseAnonKey, {
-    cookies: {
-      get(key) {
-        return cookieStore.get(key)?.value
-      },
-      set(key, value, options) {
-        try {
-          cookieStore.set(key, value, options)
-        } catch {}
-      },
-      remove(key, options) {
-        try {
-          cookieStore.delete(key)
-        } catch {}
+  return createServerClient<Database>(
+    config.supabaseUrl,
+    config.supabaseAnonKey,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value
+        },
+        // En server components no se pueden mutar cookies,
+        // así que dejamos set/remove como no-ops
+        set() {
+          // noop
+        },
+        remove() {
+          // noop
+        }
       }
     }
-  })
+  )
 }

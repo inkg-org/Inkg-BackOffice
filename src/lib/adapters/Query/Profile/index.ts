@@ -1,14 +1,17 @@
-import { createClient } from '@/src/lib/utils/supabase/client'
+'use client'
+
 import { useQuery } from '@tanstack/react-query'
+import { createClient } from '@/src/lib/utils/supabase/client'
 
-const supabase = createClient()
-
+// 🔹 Obtiene todos los perfiles
 export async function getAllProfiles() {
+  const supabase = createClient()
   const { data, error } = await supabase.from('profile').select('*')
   if (error) throw error
   return data
 }
 
+// 🔹 Hook para obtener todos los perfiles
 export function useGetAllProfiles() {
   return useQuery({
     queryKey: ['allProfiles'],
@@ -16,7 +19,9 @@ export function useGetAllProfiles() {
   })
 }
 
+// 🔹 Obtiene un perfil por ID
 export async function getProfile(userId: string) {
+  const supabase = createClient()
   const { data, error } = await supabase
     .from('profile')
     .select('*')
@@ -27,6 +32,7 @@ export async function getProfile(userId: string) {
   return data
 }
 
+// 🔹 Hook para obtener un perfil
 export function useGetProfile(userId: string | undefined | null) {
   return useQuery({
     queryKey: ['profile', userId],
