@@ -1,3 +1,4 @@
+'use client'
 import { useState } from 'react'
 import { Upload as TusUpload } from 'tus-js-client'
 import cookie from 'cookie'
