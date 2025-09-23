@@ -4,7 +4,6 @@ export const createUserSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   role: z.string().min(1, 'Choose a Role'),
-
   first_name: z.string().min(1, 'First name is required'),
   middle_name: z.string().optional(),
   last_name: z.string().min(1, 'Last name is required'),
@@ -16,9 +15,27 @@ export const createUserSchema = z.object({
   zip_code: z.coerce.number({
     invalid_type_error: 'ZIP code must be a number'
   }),
-  phone: z.string().min(1, 'Phone is required'),
-  certificate_number: z.string().min(1, 'Certificate number is required'),
-  birth: z.string().min(1, 'bith is rrequired'),
+  phone: z
+    .string()
+    .min(8, 'Phone number must be at least 8 digits')
+    .max(13, 'Phone number must be at most 13 digits')
+    .regex(
+      /^\+?\d+$/,
+      'Phone number must contain only digits and may start with +'
+    ),
+  certificate_number: z
+    .string()
+    .regex(/^INKMIA/, 'Certificate number format is invalid'),
+  birth: z
+    .string()
+    .min(1, 'Birth is required')
+    .refine(
+      (val) => {
+        const date = new Date(val)
+        return !isNaN(date.getTime()) && date < new Date()
+      },
+      { message: 'Birthdate must be earlier than today' }
+    ),
   DOB_short: z.string().optional(),
   birth_place: z.string().min(1, 'Birth place is required'),
   nacionality: z.string().min(1, 'Nationality is required'),
@@ -26,11 +43,33 @@ export const createUserSchema = z.object({
   clan: z.enum(['Wolf Clan', 'Turtle Clan', 'Bear Clan']),
   height: z.string().min(1, 'Height is required'),
   weight: z.coerce.number({ invalid_type_error: 'Weight must be a number' }),
-  eye_color: z.enum(['BLK', 'BLU', 'BRO', 'GRY', 'GRN', 'HAZ', 'MAR', 'PNK', 'DIC', 'UNK']),
-  hair_color: z.enum(['BLK', 'BLU', 'BRO', 'GRY', 'GRN', 'UNK', 'BAL', 'BLN', 'RED', 'SDY', 'WHI']),
+  eye_color: z.enum([
+    'BLK',
+    'BLU',
+    'BRO',
+    'GRY',
+    'GRN',
+    'HAZ',
+    'MAR',
+    'PNK',
+    'DIC',
+    'UNK'
+  ]),
+  hair_color: z.enum([
+    'BLK',
+    'BLU',
+    'BRO',
+    'GRY',
+    'GRN',
+    'UNK',
+    'BAL',
+    'BLN',
+    'RED',
+    'SDY',
+    'WHI'
+  ]),
   sign: z.string().optional(),
   fingerprints: z.string().optional(),
-  clan_image: z.string().optional(),
   photo: z.string().optional()
 })
 

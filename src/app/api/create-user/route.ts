@@ -22,10 +22,11 @@ export async function POST(req: Request) {
       email,
       password,
       email_confirm: true,
-      user_metadata: { role }
+      app_metadata: { role }
     })
 
   if (!userResponse?.user?.id) {
+    console.error('Supabase createUser error:', signUpError)
     return NextResponse.json(
       { error: signUpError?.message ?? 'Error creating user' },
       { status: 400 }
