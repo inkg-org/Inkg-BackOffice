@@ -8,7 +8,6 @@ import { createUserSchema, CreateUserSchema } from '@/src/lib/types/createUser'
 import { createUser } from '@/src/lib/adapters/Mutation/createUser'
 import { input, label, select } from './Styles'
 import { states } from '@/src/lib/utils/statesList'
-import { countries } from '@/src/lib/utils/countryList'
 
 export default function CreateCitizenForm() {
   const [success, setSuccess] = useState(false)
@@ -16,6 +15,7 @@ export default function CreateCitizenForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
     reset,
     watch,
@@ -32,12 +32,24 @@ export default function CreateCitizenForm() {
       reset()
     },
     onError: (error: any) => {
-      console.error(error)
+      // 👇 Aquí viene lo que tiraste en createUser
+      const message = error.message || 'Something went wrong'
+
+      if (message.toLowerCase().includes('email')) {
+        setError('email', {
+          type: 'server',
+          message: 'This email is already registered.'
+        })
+      } else {
+        setError('root', {
+          type: 'server',
+          message
+        })
+      }
     }
   })
 
   const onSubmit = (data: CreateUserSchema) => {
-    console.log('Form data:', data)
     mutation.mutate(data)
   }
 
@@ -81,9 +93,7 @@ export default function CreateCitizenForm() {
         <div>
           <label className={` ${label}`}>Role</label>
           <select {...register('role', { required: true })} className={select}>
-            <option value=''>
-              Select role
-            </option>
+            <option value=''>Select role</option>
             <option value='citizen'>Citizen</option>
             <option value='admin'>Admin</option>
           </select>
@@ -164,9 +174,7 @@ export default function CreateCitizenForm() {
             {...register('state', { required: 'State is required' })}
             className={` ${input}`}
           >
-            <option value=''>
-              Select a state
-            </option>
+            <option value=''>Select a state</option>
             {states.map((s) => (
               <option key={s.code} value={s.code}>
                 {s.name}
@@ -176,19 +184,14 @@ export default function CreateCitizenForm() {
         </div>
         <div>
           <label className={` ${label}`}>Country</label>
-          <select
-            {...register('country', { required: 'Country is required' })}
+          <input
+            {...register('country')}
+            placeholder='Country'
             className={` ${input}`}
-          >
-            <option value='' disabled hidden>
-              Select a country
-            </option>
-            {countries.map((c) => (
-              <option key={c.code} value={c.code}>
-                {c.name}
-              </option>
-            ))}
-          </select>
+          />{' '}
+          {errors.country && (
+            <p className='text-red-500 text-sm'>{errors.country?.message}</p>
+          )}
         </div>
         <div>
           <label className={` ${label}`}>Zip Code</label>
@@ -220,7 +223,7 @@ export default function CreateCitizenForm() {
             {...register('certificate_number')}
             placeholder='Certificate #'
             className={` ${input}`}
-              defaultValue="INKMIA"
+            defaultValue='INKMIA'
           />{' '}
           {errors.certificate_number && (
             <p className='text-red-500 text-sm'>
@@ -237,26 +240,26 @@ export default function CreateCitizenForm() {
             placeholder='Birthdate'
             type='date'
             className={` ${input}`}
-          /> {errors.birth && (
-            <p className='text-red-500 text-sm'>
-              {errors.birth?.message}
-            </p>
+          />{' '}
+          {errors.birth && (
+            <p className='text-red-500 text-sm'>{errors.birth?.message}</p>
           )}
         </div>
-         <input
-          type="hidden"
-            {...register('DOB_short')}
-            placeholder='DOB short'
-            className={` ${input}`}
-            readOnly
-          />
+        <input
+          type='hidden'
+          {...register('DOB_short')}
+          placeholder='DOB short'
+          className={` ${input}`}
+          readOnly
+        />
         <div>
           <label className={` ${label}`}>Birth Place</label>
           <input
             {...register('birth_place')}
             placeholder='Birth Place'
             className={` ${input}`}
-          /> {errors.birth_place && (
+          />{' '}
+          {errors.birth_place && (
             <p className='text-red-500 text-sm'>
               {errors.birth_place?.message}
             </p>
@@ -268,7 +271,8 @@ export default function CreateCitizenForm() {
             {...register('nacionality')}
             placeholder='Nationality'
             className={` ${input}`}
-          /> {errors.nacionality && (
+          />{' '}
+          {errors.nacionality && (
             <p className='text-red-500 text-sm'>
               {errors.nacionality?.message}
             </p>
@@ -279,9 +283,7 @@ export default function CreateCitizenForm() {
         <div>
           <label className={` ${label}`}>Gender</label>
           <select {...register('gender')} className={` ${input}`}>
-            <option value=''>
-              Select gender
-            </option>
+            <option value=''>Select gender</option>
             <option value='Male'>Male</option>
             <option value='Female'>Female</option>
             <option value='Other'>Other</option>
@@ -290,9 +292,7 @@ export default function CreateCitizenForm() {
         <div>
           <label className={` ${label}`}>Clan</label>
           <select {...register('clan')} className={` ${input}`}>
-            <option value=''>
-              Select clan
-            </option>
+            <option value=''>Select clan</option>
             <option value='Wolf Clan'>Wolf Clan</option>
             <option value='Turtle Clan'>Turtle Clan</option>
             <option value='Bear Clan'>Bear Clan</option>
@@ -306,10 +306,9 @@ export default function CreateCitizenForm() {
             {...register('height')}
             placeholder='Height'
             className={` ${input}`}
-          />{errors.height && (
-            <p className='text-red-500 text-sm'>
-              {errors.height?.message}
-            </p>
+          />
+          {errors.height && (
+            <p className='text-red-500 text-sm'>{errors.height?.message}</p>
           )}
         </div>{' '}
         <div>
@@ -319,18 +318,15 @@ export default function CreateCitizenForm() {
             placeholder='Weight'
             type='number'
             className={` ${input}`}
-          />{errors.weight && (
-            <p className='text-red-500 text-sm'>
-              {errors.weight?.message}
-            </p>
+          />
+          {errors.weight && (
+            <p className='text-red-500 text-sm'>{errors.weight?.message}</p>
           )}
         </div>{' '}
         <div>
           <label className={` ${label}`}>Eye colors</label>
           <select {...register('eye_color')} className={` ${input}`}>
-            <option value=''>
-              Select Eye colors
-            </option>
+            <option value=''>Select Eye colors</option>
             <option value='BLK'>Black</option>
             <option value='BLU'>Blue</option>
             <option value='BRO'>Brown</option>
@@ -346,9 +342,7 @@ export default function CreateCitizenForm() {
         <div>
           <label className={` ${label}`}>Hair color</label>
           <select {...register('hair_color')} className={` ${input}`}>
-            <option value=''>
-              Select Hair color
-            </option>
+            <option value=''>Select Hair color</option>
             <option value='BAL'>Bald</option>
             <option value='BLK'>Black</option>
             <option value='BLN'>Blonde</option>

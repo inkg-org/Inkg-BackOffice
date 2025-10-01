@@ -50,7 +50,7 @@ const TextField = <Schema extends TextFieldSchema = {}>({
   const [isObscure, setIsObscure] = useState(false)
   const { control: fallbackControl } = useForm()
 
-  const { field } = useController({
+  const { field, fieldState: { error } } = useController({
     name: name as string,
     control: control ?? fallbackControl,
     rules
@@ -74,7 +74,7 @@ const TextField = <Schema extends TextFieldSchema = {}>({
 
   return (
     <div>
-      <label htmlFor={id} className={cn(label ? '' : 'sr-only')}>
+      <label htmlFor={id} className={cn(label ? 'text-sm' : 'sr-only text-sm')}>
         {label}
       </label>
       <div className='relative'>
@@ -82,7 +82,7 @@ const TextField = <Schema extends TextFieldSchema = {}>({
         <input
           {...field}
           id={id}
-          type={isObscure ? 'text' : 'password'}
+            type={includeObscure ? (isObscure ? 'text' : 'password') : inputProps.type || 'text'}
           className={cn(
             'appearance-none rounded-md relative block w-full px-3 py-2 my-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm',
             className
@@ -105,6 +105,7 @@ const TextField = <Schema extends TextFieldSchema = {}>({
           </div>
         )}
       </div>
+      {error && <p className="mt-1 text-sm text-red-600">{error.message}</p>}
     </div>
   )
 }

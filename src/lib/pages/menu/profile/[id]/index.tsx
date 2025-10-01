@@ -10,11 +10,14 @@ import Timeline from '../components/Timeline'
 import About from '../components/About'
 import { useParams } from 'next/navigation'
 import { useGetProfile } from '@/src/lib/adapters/Query/Profile'
+import { Modal } from '@/src/components/molecules/Modal'
+import { UpdateProfileForm } from '../components/UpdateProfileForm'
 
 const SingleProfile = () => {
   const params = useParams()
   const userId = params?.id as string
   const [tab, setTab] = useState<'timeline' | 'about'>('about')
+  const [open, setOpen] = useState(false)
   const { data: profile, isLoading: isLoadingProfile } = useGetProfile(userId)
   const { data: credentials, isLoading: isLoadingCredentials } =
     useGetCredentials(profile?.id)
@@ -72,7 +75,12 @@ const SingleProfile = () => {
               </p>
             </div>
             <div className='flex items-center gap-4'>
-              <FilledButton className='px-10 py-2'>See your ID</FilledButton>
+              <FilledButton
+                className='px-10 py-2'
+                onClick={() => setOpen(true)}
+              >
+                Edit Profile
+              </FilledButton>
             </div>
           </div>
 
@@ -104,6 +112,30 @@ const SingleProfile = () => {
           )}
         </div>
       </div>
+      {open && profile && (
+        <Modal
+          id='update-profile'
+          isActive={open}
+          onChange={setOpen}
+          body={
+            <UpdateProfileForm
+              data={{
+                ...profile!,
+                firstName: profile!.first_name,
+                middleName: profile!.middle_name,
+                lastName: profile!.last_name,
+                zipCode: profile!.zip_code,
+                certificateNumber: profile!.certificate_number,
+                secondaryAddress: profile!.secondary_address,
+                eyeColor: profile!.eye_color,
+                hairColor: profile!.hair_color,
+                birthPlace: profile!.birth_place
+              }}
+              onSuccess={() => setOpen(false)}
+            />
+          }
+        />
+      )}
     </div>
   )
 }

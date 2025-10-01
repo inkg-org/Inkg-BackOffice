@@ -1,18 +1,16 @@
 import { z } from 'zod'
 
-export const createUserSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  role: z.string().min(1, 'Choose a Role'),
-  first_name: z.string().min(1, 'First name is required'),
-  middle_name: z.string().optional(),
-  last_name: z.string().min(1, 'Last name is required'),
+export const updateUserSchema = z.object({
+  id: z.string(),
+  firstName: z.string().min(1, 'First name is required'),
+  middleName: z.string().optional(),
+  lastName: z.string().min(1, 'Last name is required'),
   address: z.string().min(1, 'Address is required'),
-  secondary_address: z.string().optional(),
+  secondaryAddress: z.string().optional(),
   city: z.string().min(1, 'City is required'),
   state: z.string().min(1, 'State is required'),
   country: z.string().min(1, 'Country is required'),
-  zip_code: z.coerce.number({
+  zipCode: z.coerce.number({
     invalid_type_error: 'ZIP code must be a number'
   }),
   phone: z
@@ -23,7 +21,7 @@ export const createUserSchema = z.object({
       /^\+?\d+$/,
       'Phone number must contain only digits and may start with +'
     ).optional(),
-  certificate_number: z
+  certificateNumber: z
     .string()
     .regex(/^INKMIA/, 'Certificate number format is invalid'),
   birth: z
@@ -36,14 +34,15 @@ export const createUserSchema = z.object({
       },
       { message: 'Birthdate must be earlier than today' }
     ),
-  DOB_short: z.string().optional(),
-  birth_place: z.string().min(1, 'Birth place is required'),
-  nacionality: z.string().min(1, 'Nationality is required'),
+  DOBShort: z.string().optional(),
+  birthPlace: z.string().min(1, 'Birth place is required'),
+  nacionality: z.string().min(1, 'Nationality is required').optional(),
   gender: z.enum(['Male', 'Female', 'Other']),
-  clan: z.enum(['Wolf Clan', 'Turtle Clan', 'Bear Clan']),
+  clan: z.enum(['Bear Clan', 'Wolf Clan', 'Turtle Clan']).nullable(),
+
   height: z.string().min(1, 'Height is required'),
   weight: z.coerce.number({ invalid_type_error: 'Weight must be a number' }),
-  eye_color: z.enum([
+  eyeColor: z.enum([
     'BLK',
     'BLU',
     'BRO',
@@ -55,7 +54,7 @@ export const createUserSchema = z.object({
     'DIC',
     'UNK'
   ]),
-  hair_color: z.enum([
+  hairColor: z.enum([
     'BLK',
     'BLU',
     'BRO',
@@ -73,4 +72,4 @@ export const createUserSchema = z.object({
   photo: z.string().optional()
 })
 
-export type CreateUserSchema = z.infer<typeof createUserSchema>
+export type UpdateUserSchema = z.infer<typeof updateUserSchema>

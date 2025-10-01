@@ -1,0 +1,83 @@
+export const CLAN = ['Wolf Clan', 'Turtle Clan', 'Bear Clan'] as const
+
+export const GENDER = ['Male', 'Female', 'Other'] as const
+
+export const EYE_COLORS = [
+  'BLK',
+  'BLU',
+  'BRO',
+  'GRY',
+  'GRN',
+  'HAZ',
+  'MAR',
+  'PNK',
+  'DIC',
+  'UNK'
+] as const
+
+export const HAIR_COLORS = [
+  'BLK',
+  'BLU',
+  'BRO',
+  'GRY',
+  'GRN',
+  'UNK',
+  'BAL',
+  'BLN',
+  'RED',
+  'SDY',
+  'WHI'
+] as const
+
+export const STATE_CODES = [
+  'AL',
+  'AK',
+  'AZ',
+  'AR',
+  'CA',
+  'CO',
+  'CT',
+  'DE',
+  'FL',
+  'GA',
+  'HI',
+  'ID',
+  'IL',
+  'IN',
+  'IA',
+  'KS',
+  'KY',
+  'LA',
+  'ME',
+  'MD',
+  'MA',
+  'MI',
+  'MN',
+  'MS',
+  'MO',
+  'MT',
+  'NE',
+  'NV',
+  'NH',
+  'NJ',
+  'NM',
+  'NY',
+  'NC',
+  'ND',
+  'OH',
+  'OK',
+  'OR',
+  'PA',
+  'RI',
+  'SC',
+  'SD',
+  'TN',
+  'TX',
+  'UT',
+  'VT',
+  'VA',
+  'WA',
+  'WV',
+  'WI',
+  'WY'
+] as const
