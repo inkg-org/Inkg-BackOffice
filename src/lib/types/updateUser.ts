@@ -15,12 +15,8 @@ export const updateUserSchema = z.object({
   }),
   phone: z
     .string()
-    .min(8, 'Phone number must be at least 8 digits')
     .max(13, 'Phone number must be at most 13 digits')
-    .regex(
-      /^\+?\d+$/,
-      'Phone number must contain only digits and may start with +'
-    ).optional(),
+    .optional(),
   certificateNumber: z
     .string()
     .regex(/^INKMIA/, 'Certificate number format is invalid'),

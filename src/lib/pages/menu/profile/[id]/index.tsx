@@ -12,12 +12,14 @@ import { useParams } from 'next/navigation'
 import { useGetProfile } from '@/src/lib/adapters/Query/Profile'
 import { Modal } from '@/src/components/molecules/Modal'
 import { UpdateProfileForm } from '../components/UpdateProfileForm'
+import { useQueryClient } from '@tanstack/react-query'
 
 const SingleProfile = () => {
   const params = useParams()
   const userId = params?.id as string
   const [tab, setTab] = useState<'timeline' | 'about'>('about')
   const [open, setOpen] = useState(false)
+  const queryClient = useQueryClient()
   const { data: profile, isLoading: isLoadingProfile } = useGetProfile(userId)
   const { data: credentials, isLoading: isLoadingCredentials } =
     useGetCredentials(profile?.id)
@@ -131,7 +133,10 @@ const SingleProfile = () => {
                 hairColor: profile!.hair_color,
                 birthPlace: profile!.birth_place
               }}
-              onSuccess={() => setOpen(false)}
+              onSuccess={() => {
+                queryClient.invalidateQueries({ queryKey: ['profile', userId] })
+                setOpen(false)
+              }}
             />
           }
         />
