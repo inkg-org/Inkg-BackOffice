@@ -22,6 +22,8 @@ export interface TablePaginationProps {
    * Contador de registros en la página actual
    */
   pageCount?: number
+
+  currentPage?: number
 }
 
 /**
@@ -31,7 +33,8 @@ const TablePagination = ({
   count,
   onPaginate,
   isLoading,
-  pageCount
+  pageCount,
+  currentPage = 0
 }: TablePaginationProps) => {
   const itemsPerPage = 10
   const arrayLength = useMemo(() => {
@@ -49,18 +52,26 @@ const TablePagination = ({
     <div className='flex flex-row gap-2 items-center py-8 pr-4'>
       Total: {count}
       {arrayLength > 0 &&
-        Array.from({ length: arrayLength }, (_, i) => i).map((i) => (
-          <button
-            key={i}
-            onClick={() => {
-              const offset = itemsPerPage * i
-              onPaginate?.(offset, itemsPerPage)
-            }}
-            className='text-gray-400 hover:text-secondary-200 bg-white border border-gray-300 rounded-md px-2 py-1 transition-all duration-[300ms]'
-          >
-            {i + 1}
-          </button>
-        ))}
+        Array.from({ length: arrayLength }, (_, i) => i).map((i) => {
+          const isActive = i === currentPage
+          return (
+            <button
+              key={i}
+              onClick={() => {
+                const offset = itemsPerPage * i
+                onPaginate?.(offset, itemsPerPage)
+              }}
+              className={`px-3 py-1 rounded-md border transition-all duration-300
+                ${
+                  isActive
+                    ? 'bg-MainBlue text-white border-MainBlue'
+                    : 'bg-white text-gray-500 hover:text-MainBlue hover:border-MainBlue'
+                }`}
+            >
+              {i + 1}
+            </button>
+          )
+        })}
     </div>
   )
 }

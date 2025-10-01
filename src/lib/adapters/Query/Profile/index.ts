@@ -1,25 +1,42 @@
+/* eslint-disable camelcase */
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
 import { createClient } from '@/src/lib/utils/supabase/client'
 
-// 🔹 Obtiene todos los perfiles
-export async function getAllProfiles() {
-  const supabase = createClient()
-  const { data, error } = await supabase.from('profile').select('*')
-  if (error) throw error
-  return data
+export interface GetProfilesParams {
+  limit_value: number
+  offset_value: number
 }
 
-// 🔹 Hook para obtener todos los perfiles
-export function useGetAllProfiles() {
+export async function getAllProfiles({
+  limit_value,
+  offset_value
+}: GetProfilesParams) {
+  const supabase = createClient()
+  const { data, error, count } = await supabase
+    .from('profile')
+    .select('*', { count: 'exact' }) // cuenta total de filas
+    .range(offset_value, offset_value + limit_value - 1) // paginación
+  if (error) throw error
+
+  return {
+    profiles: data,
+    count
+  }
+}
+
+export function useGetAllProfiles({
+  limit_value,
+  offset_value
+}: GetProfilesParams) {
   return useQuery({
-    queryKey: ['allProfiles'],
-    queryFn: getAllProfiles
+    queryKey: ['allProfiles', limit_value, offset_value],
+    queryFn: () => getAllProfiles({ limit_value, offset_value })
+    // keepPreviousData: true
   })
 }
 
-// 🔹 Obtiene un perfil por ID
 export async function getProfile(userId: string) {
   const supabase = createClient()
   const { data, error } = await supabase
@@ -32,7 +49,6 @@ export async function getProfile(userId: string) {
   return data
 }
 
-// 🔹 Hook para obtener un perfil
 export function useGetProfile(userId: string | undefined | null) {
   return useQuery({
     queryKey: ['profile', userId],

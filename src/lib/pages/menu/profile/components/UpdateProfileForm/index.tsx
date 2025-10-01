@@ -291,7 +291,7 @@ export const UpdateProfileForm = ({ data, onSuccess }: EditProfileProps) => {
 
         <Button.FilledButton
           type='submit'
-          className='mt-4 w-full items-center'
+          className='mt-4 w-full items-center justify-center py-2'
           isLoading={isPending}
         >
           Update Profile

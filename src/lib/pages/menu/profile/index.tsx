@@ -5,11 +5,17 @@ import TextButton from '@/src/components/atoms/Button/TextButton'
 import Table from '@/src/components/organisms/Table'
 import { useGetAllProfiles } from '@/src/lib/adapters/Query/Profile'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useState } from 'react'
 import { FiDownload } from 'react-icons/fi'
 
 const ProfilePage = () => {
-  const { data } = useGetAllProfiles()
+  const [query, setQuery] = useState({
+    limit_value: 10,
+    offset_value: 0,
+    search_value: ''
+  })
+  const [currentPage, setCurrentPage] = useState(0)
+  const { data, refetch } = useGetAllProfiles(query)
 
   const router = useRouter()
   return (
@@ -21,20 +27,26 @@ const ProfilePage = () => {
       </p>
       <Table
         id='credentials'
-        cols={['#', 'Name', 'Certificate Number', 'Clan', '', '']}
-        rows={data?.map((row, index) => {
+        cols={['Name', 'Certificate Number', 'Clan', '', '']}
+        rows={data?.profiles?.map((row, index) => {
           return {
             id: row.id,
             values: [
-              <p key={`index-${row.id}`}>{index + 1}</p>,
-              row.first_name,
+              <p key={`name-${row.id}`}>
+                {`${row.first_name ?? ''} ${row.middle_name ?? ''} ${row.last_name ?? ''}` ||
+                  'N/A'}
+              </p>,
               <p key={`issue-${row.id}`}>{row.certificate_number || 'N/A'}</p>,
               <p key={`clan-${row.id}`}>{row.clan || 'N/A'}</p>,
               <div
                 key={`view-${row.id}`}
                 className='flex items-center justify-center'
               >
-                <FilledButton onClick={() => router.push(`/menu/profile/${row.id}`)}>View</FilledButton>
+                <FilledButton
+                  onClick={() => router.push(`/menu/profile/${row.id}`)}
+                >
+                  View
+                </FilledButton>
               </div>,
               <div
                 key={`download-${row.id}`}
@@ -47,6 +59,13 @@ const ProfilePage = () => {
             ]
           }
         })}
+        refetch={refetch}
+        count={data?.count ?? undefined}
+        currentPage={currentPage}
+        onPaginate={(from, to) => {
+          setQuery({ ...query, offset_value: from, limit_value: to })
+          setCurrentPage(from / query.limit_value)
+        }}
       />
     </div>
   )

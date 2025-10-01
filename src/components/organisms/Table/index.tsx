@@ -4,6 +4,7 @@ import React from 'react'
 import { modalLoadingMode, TableRow } from './types'
 import useTableRenders from './hooks/useTableRenders'
 import TableLoadingOverlay from './components/TableLoadingOverlay'
+import TablePagination from './components/TablePagination'
 
 export interface TableProps {
   includeActions?: boolean
@@ -15,6 +16,7 @@ export interface TableProps {
   onDelete?(ids: string[]): void
   onSearch?(value: string): void
   count?: number
+  currentPage?: number
   onPaginate?(from: number, to: number): void
   modalLoadingMode?: modalLoadingMode
 }
@@ -29,15 +31,15 @@ function Table({
   count,
   onPaginate,
   refetch,
+  currentPage,
   modalLoadingMode = 'eager'
 }: TableProps) {
-  const { colsRender, rowsRender } =
-    useTableRenders({
-      id,
-      cols,
-      rows,
-      includeActions
-    })
+  const { colsRender, rowsRender } = useTableRenders({
+    id,
+    cols,
+    rows,
+    includeActions
+  })
 
   return (
     <div className='flex flex-col items-end'>
@@ -50,6 +52,13 @@ function Table({
           </table>
         </div>
       </div>
+      <TablePagination
+        count={count}
+        currentPage={currentPage}
+        onPaginate={onPaginate}
+        isLoading={isActionLoading}
+        pageCount={rows?.length ?? 1}
+      />
     </div>
   )
 }
