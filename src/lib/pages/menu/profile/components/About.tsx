@@ -1,23 +1,14 @@
 'use client'
-import { useMenuStore } from '@/src/app/menu/_state/provider'
 import publicPaths from '@/src/lib/images'
 import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 interface AboutProps {
   profile: any
+  userEmail?: string
 }
 
-export default function About({ profile }: AboutProps) {
-  const { user } = useMenuStore((store) => store)
-  const [userEmail, setUserEmail] = useState<string | undefined>()
-
-  useEffect(() => {
-    if (user) {
-      setUserEmail(user.email ?? '')
-    }
-  }, [user])
-
+const About: React.FC<AboutProps> = ({ profile, userEmail }) => {
   return (
     <div className='grid grid-cols-2 gap-6 text-md text-gray-700'>
       <div className='border border-gray-300 p-3 rounded-md'>
@@ -114,3 +105,5 @@ export default function About({ profile }: AboutProps) {
     </div>
   )
 }
+
+export default About

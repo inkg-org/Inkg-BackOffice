@@ -7,6 +7,9 @@ import IMutationOptions from '../../types/mutationsOPtions'
 const supabase = createClient()
 
 export interface UpdateProfileFormData {
+  email?: string
+  password?:string
+  role?: string
   id: string
   firstName: string
   middleName?: string

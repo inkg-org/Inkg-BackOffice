@@ -45,12 +45,17 @@ const TextField = <Schema extends TextFieldSchema = {}>({
   position = 'middle',
   prefix,
   formatter = defaultFormatter,
+  type = 'text',
   ...inputProps
 }: TextFieldProps<Schema>) => {
   const [isObscure, setIsObscure] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const { control: fallbackControl } = useForm()
 
-  const { field, fieldState: { error } } = useController({
+  const {
+    field,
+    fieldState: { error }
+  } = useController({
     name: name as string,
     control: control ?? fallbackControl,
     rules
@@ -72,6 +77,8 @@ const TextField = <Schema extends TextFieldSchema = {}>({
 
   const id = useId()
 
+  const isPasswordType = type === 'password'
+
   return (
     <div>
       <label htmlFor={id} className={cn(label ? 'text-sm' : 'sr-only text-sm')}>
@@ -82,7 +89,7 @@ const TextField = <Schema extends TextFieldSchema = {}>({
         <input
           {...field}
           id={id}
-            type={includeObscure ? (isObscure ? 'text' : 'password') : inputProps.type || 'text'}
+          type={isPasswordType ? (showPassword ? 'text' : 'password') : type}
           className={cn(
             'appearance-none rounded-md relative block w-full px-3 py-2 my-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm',
             className
@@ -104,8 +111,18 @@ const TextField = <Schema extends TextFieldSchema = {}>({
             </button>
           </div>
         )}
+        {isPasswordType && (
+          <button
+            type='button'
+            onClick={() => setShowPassword((prev) => !prev)}
+            className='absolute inset-y-0 right-3 flex items-center text-gray-600 text-xl'
+            tabIndex={-1} // evita robar foco del input
+          >
+            {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+          </button>
+        )}
       </div>
-      {error && <p className="mt-1 text-sm text-red-600">{error.message}</p>}
+      {error && <p className='mt-1 text-sm text-red-600'>{error.message}</p>}
     </div>
   )
 }

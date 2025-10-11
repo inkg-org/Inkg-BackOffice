@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import publicPaths from '@/src/lib/images'
 import FilledButton from '@/src/components/atoms/Button/FilledButton'
@@ -13,18 +13,45 @@ import { useGetProfile } from '@/src/lib/adapters/Query/Profile'
 import { Modal } from '@/src/components/molecules/Modal'
 import { UpdateProfileForm } from '../components/UpdateProfileForm'
 import { useQueryClient } from '@tanstack/react-query'
+import EmptyButton from '@/src/components/atoms/Button/EmptyButton'
+import { UpdateAccessForm } from '../components/UpdateAccessForm'
+import { getAuthUser } from '@/src/lib/adapters/Query/Accesses'
 
 const SingleProfile = () => {
   const params = useParams()
   const userId = params?.id as string
   const [tab, setTab] = useState<'timeline' | 'about'>('about')
-  const [open, setOpen] = useState(false)
+  const [openEditProfile, setOpenEditProfile] = useState(false)
+  const [openEditAccess, setOpenEditAccess] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const [isLoadingUser, setIsLoadingUser] = useState(true)
+
   const queryClient = useQueryClient()
+
   const { data: profile, isLoading: isLoadingProfile } = useGetProfile(userId)
   const { data: credentials, isLoading: isLoadingCredentials } =
     useGetCredentials(profile?.id)
 
-  if (isLoadingProfile || isLoadingCredentials) return <LottieLoader />
+  const fetchUser = useCallback(async () => {
+    try {
+      if (!userId) return
+      setIsLoadingUser(true)
+      const fetchedUser = await getAuthUser(userId)
+      setUser(fetchedUser)
+    } catch (error) {
+      console.error('❌ Error fetching auth user:', error)
+    } finally {
+      setIsLoadingUser(false)
+    }
+  }, [userId])
+
+  useEffect(() => {
+    fetchUser()
+  }, [fetchUser])
+
+  if (isLoadingProfile || isLoadingCredentials || isLoadingUser) {
+    return <LottieLoader />
+  }
 
   return (
     <div>
@@ -62,6 +89,7 @@ const SingleProfile = () => {
             </div>
           </div>
         </div>
+
         <div className='w-3/4 space-y-6'>
           <div className='flex justify-between pb-4'>
             <div>
@@ -79,10 +107,16 @@ const SingleProfile = () => {
             <div className='flex items-center gap-4'>
               <FilledButton
                 className='px-10 py-2'
-                onClick={() => setOpen(true)}
+                onClick={() => setOpenEditProfile(true)}
               >
                 Edit Profile
               </FilledButton>
+              <EmptyButton
+                className='px-10 py-2'
+                onClick={() => setOpenEditAccess(true)}
+              >
+                Edit Accesses
+              </EmptyButton>
             </div>
           </div>
 
@@ -108,17 +142,21 @@ const SingleProfile = () => {
               Timeline
             </button>
           </div>
-          {tab === 'about' && <About profile={profile} />}
+
+          {tab === 'about' && (
+            <About profile={profile} userEmail={user?.email} />
+          )}
           {tab === 'timeline' && profile && (
             <Timeline profile={profile} credentials={credentials || []} />
           )}
         </div>
       </div>
-      {open && profile && (
+
+      {openEditProfile && profile && (
         <Modal
           id='update-profile'
-          isActive={open}
-          onChange={setOpen}
+          isActive={openEditProfile}
+          onChange={setOpenEditProfile}
           body={
             <UpdateProfileForm
               data={{
@@ -133,9 +171,31 @@ const SingleProfile = () => {
                 hairColor: profile!.hair_color,
                 birthPlace: profile!.birth_place
               }}
+              onSuccess={async () => {
+                queryClient.invalidateQueries({ queryKey: ['profile', userId] })
+                await fetchUser()
+                setOpenEditAccess(false)
+              }}
+            />
+          }
+        />
+      )}
+
+      {openEditAccess && profile && user && (
+        <Modal
+          id='update-profile-access'
+          isActive={openEditAccess}
+          onChange={setOpenEditAccess}
+          body={
+            <UpdateAccessForm
+              data={{
+                id: user.id,
+                email: user.email,
+                role: user.user_metadata?.role ?? ''
+              }}
               onSuccess={() => {
                 queryClient.invalidateQueries({ queryKey: ['profile', userId] })
-                setOpen(false)
+                setOpenEditAccess(false)
               }}
             />
           }
