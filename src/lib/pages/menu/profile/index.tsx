@@ -10,9 +10,9 @@ import { FiDownload } from 'react-icons/fi'
 
 const ProfilePage = () => {
   const [query, setQuery] = useState({
-    limit_value: 10,
-    offset_value: 0,
-    search_value: ''
+    limit: 10,
+    offset: 0,
+    search: ''
   })
   const [currentPage, setCurrentPage] = useState(0)
   const { data, refetch } = useGetAllProfiles(query)
@@ -59,12 +59,16 @@ const ProfilePage = () => {
             ]
           }
         })}
+        includeActions
         refetch={refetch}
         count={data?.count ?? undefined}
         currentPage={currentPage}
         onPaginate={(from, to) => {
-          setQuery({ ...query, offset_value: from, limit_value: to })
-          setCurrentPage(from / query.limit_value)
+          setQuery({ ...query, offset: from, limit: to })
+          setCurrentPage(from / query.limit)
+        }}
+        onSearch={(search) => {
+          setQuery({ ...query, search })
         }}
       />
     </div>

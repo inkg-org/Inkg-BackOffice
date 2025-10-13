@@ -1,23 +1,47 @@
-/* eslint-disable camelcase */
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { createClient } from '@/src/lib/utils/supabase/client'
+import { useQuery } from '@tanstack/react-query'
+
+const supabase = createClient()
 
 export interface GetProfilesParams {
-  limit_value: number
-  offset_value: number
+  limit: number
+  offset: number
+  search?: string
+  id?: string
 }
 
+// 🚀 Función principal (idéntica estructura a getDrivers)
 export async function getAllProfiles({
-  limit_value,
-  offset_value
+  limit,
+  offset,
+  search,
+  id
 }: GetProfilesParams) {
-  const supabase = createClient()
-  const { data, error, count } = await supabase
+  // Si tienes un RPC en supabase, puedes reemplazar esto por:
+  // const { data, error } = await supabase.rpc('search_profiles', { search_value: search ?? '', limit_value: limit, offset_value: offset })
+  // Pero aquí lo hacemos directamente con query.
+
+  let query = supabase
     .from('profile')
-    .select('*', { count: 'exact' }) // cuenta total de filas
-    .range(offset_value, offset_value + limit_value - 1) // paginación
+    .select('*', { count: 'exact' })
+    .range(offset, offset + limit - 1)
+
+  // 🔍 Si hay búsqueda, filtramos
+  if (search && search.trim() !== '') {
+    query = query.or(
+      `first_name.ilike.%${search}%,middle_name.ilike.%${search}%,last_name.ilike.%${search}%,certificate_number.ilike.%${search}%,city.ilike.%${search}%,country.ilike.%${search}%`
+    )
+  }
+
+  // 🔎 Si se envía un id, filtramos por él también
+  if (id) {
+    query = query.eq('id', id)
+  }
+
+  const { data, error, count } = await query
+
   if (error) throw error
 
   return {
@@ -26,14 +50,27 @@ export async function getAllProfiles({
   }
 }
 
+export interface UseGetAllProfilesProps {
+  limit: number
+  offset: number
+  search?: string
+  customKey?: string
+  id?: string
+}
+
+// 🪄 Hook react-query (idéntico a useGetDrivers)
 export function useGetAllProfiles({
-  limit_value,
-  offset_value
-}: GetProfilesParams) {
+  limit,
+  offset,
+  search,
+  customKey = '',
+  id
+}: UseGetAllProfilesProps) {
   return useQuery({
-    queryKey: ['allProfiles', limit_value, offset_value],
-    queryFn: () => getAllProfiles({ limit_value, offset_value })
-    // keepPreviousData: true
+    staleTime: 0,
+    gcTime: 0,
+    queryKey: ['profiles', limit, offset, search, id, customKey],
+    queryFn: () => getAllProfiles({ limit, offset, search, id })
   })
 }
 

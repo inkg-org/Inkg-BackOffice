@@ -5,6 +5,7 @@ import { modalLoadingMode, TableRow } from './types'
 import useTableRenders from './hooks/useTableRenders'
 import TableLoadingOverlay from './components/TableLoadingOverlay'
 import TablePagination from './components/TablePagination'
+import TableActions from './components/TableActions'
 
 export interface TableProps {
   includeActions?: boolean
@@ -34,7 +35,7 @@ function Table({
   currentPage,
   modalLoadingMode = 'eager'
 }: TableProps) {
-  const { colsRender, rowsRender } = useTableRenders({
+  const { colsRender, rowsRender, selectedIds, setSelectedIds } = useTableRenders({
     id,
     cols,
     rows,
@@ -46,6 +47,14 @@ function Table({
       <div className='text-gray-700 bg-white shadow-md rounded-xl bg-clip-border w-full'>
         <TableLoadingOverlay isActionLoading={isActionLoading} />
         <div className='flex flex-col'>
+          <TableActions
+            id={id + '-actions-bar'}
+            onDelete={onDelete}
+            selectedIds={selectedIds}
+            onSearch={onSearch}
+            setSelectedIds={setSelectedIds}
+            refetch={refetch}
+          />
           <table className='max-w-full text-left table-auto' id={id}>
             <thead>{colsRender}</thead>
             <tbody>{rowsRender}</tbody>
