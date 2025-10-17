@@ -1,12 +1,10 @@
 'use client'
 
 import FilledButton from '@/src/components/atoms/Button/FilledButton'
-import TextButton from '@/src/components/atoms/Button/TextButton'
 import Table from '@/src/components/organisms/Table'
 import { useGetAllProfiles } from '@/src/lib/adapters/Query/Profile'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-import { FiDownload } from 'react-icons/fi'
 
 const ProfilePage = () => {
   const [query, setQuery] = useState({
@@ -27,7 +25,7 @@ const ProfilePage = () => {
       </p>
       <Table
         id='credentials'
-        cols={['Name', 'Certificate Number', 'Clan', '', '']}
+        cols={['Name', 'Certificate Number', 'Clan', '']}
         rows={data?.profiles?.map((row, index) => {
           return {
             id: row.id,
@@ -52,9 +50,6 @@ const ProfilePage = () => {
                 key={`download-${row.id}`}
                 className='flex items-center justify-center'
               >
-                <TextButton className='flex items-center gap-1 hover:text-MainBlue'>
-                  Download <FiDownload className='mx-auto cursor-pointer' />
-                </TextButton>
               </div>
             ]
           }

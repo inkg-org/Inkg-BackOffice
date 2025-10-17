@@ -7,10 +7,8 @@ import { ModalBody } from '@/src/components/molecules/Modal/components/ModalBody
 import Input from '@/src/components/atoms/Input'
 import Button from '@/src/components/atoms/Button'
 import { z } from 'zod'
-import useUpdateAccess, {
-  UpdateAccessFormData
-} from '@/src/lib/adapters/Mutation/updateAccess'
 import Select from '@/src/components/atoms/Input/Select'
+import useUpdateAccess, { UpdateAccessFormData } from '@/src/lib/adapters/Mutation/Users/updateAccess'
 
 const updateAccessSchema = z
   .object({

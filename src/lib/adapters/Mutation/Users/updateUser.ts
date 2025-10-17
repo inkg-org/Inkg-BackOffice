@@ -1,8 +1,8 @@
 'use client'
 
+import IMutationOptions from '@/src/lib/types/mutationsOPtions'
 import { createClient } from '@/src/lib/utils/supabase/client'
 import { useMutation } from '@tanstack/react-query'
-import IMutationOptions from '../../types/mutationsOPtions'
 
 const supabase = createClient()
 

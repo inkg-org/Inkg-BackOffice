@@ -1,7 +1,7 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
-import { updateAuthUser } from '../Query/Accesses'
+import { updateAuthUser } from '../../Query/Accesses'
 
 export interface UpdateAccessFormData {
   id: string

@@ -3,12 +3,12 @@ import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import publicPaths from '@/src/lib/images'
 import FilledButton from '@/src/components/atoms/Button/FilledButton'
-import { IoOpenOutline } from 'react-icons/io5'
+import { IoArrowBackOutline, IoOpenOutline } from 'react-icons/io5'
 import useGetCredentials from '@/src/lib/adapters/Query/Credentials'
 import LottieLoader from '@/src/components/atoms/Lottie/LottieLoader'
 import Timeline from '../components/Timeline'
 import About from '../components/About'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useGetProfile } from '@/src/lib/adapters/Query/Profile'
 import { Modal } from '@/src/components/molecules/Modal'
 import { UpdateProfileForm } from '../components/UpdateProfileForm'
@@ -16,6 +16,8 @@ import { useQueryClient } from '@tanstack/react-query'
 import EmptyButton from '@/src/components/atoms/Button/EmptyButton'
 import { UpdateAccessForm } from '../components/UpdateAccessForm'
 import { getAuthUser } from '@/src/lib/adapters/Query/Accesses'
+import { DeleteModal } from '../components/DeleteProfile'
+import TextButton from '@/src/components/atoms/Button/TextButton'
 
 const SingleProfile = () => {
   const params = useParams()
@@ -23,8 +25,10 @@ const SingleProfile = () => {
   const [tab, setTab] = useState<'timeline' | 'about'>('about')
   const [openEditProfile, setOpenEditProfile] = useState(false)
   const [openEditAccess, setOpenEditAccess] = useState(false)
+  const [openDelete, setDelete] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [isLoadingUser, setIsLoadingUser] = useState(true)
+  const router = useRouter()
 
   const queryClient = useQueryClient()
 
@@ -57,8 +61,25 @@ const SingleProfile = () => {
     <div>
       <div className='flex gap-6'>
         <div className='w-1/4 flex flex-col items-center'>
+        <div className='flex justify-start items-start w-full pb-10 pt-2'>
+          <TextButton
+            onClick={() => router.push('/menu/profile')}
+            className='flex items-left gap-2 text-gray-700 hover:text-MainBlue transition-colors duration-200'
+          >
+            <IoArrowBackOutline size={18} />
+            Back
+          </TextButton>
+          </div>
           <Image
-            src={publicPaths.assets.user_placeholder}
+            src={(() => {
+              try {
+                return profile?.photo && new URL(profile.photo)
+                  ? profile.photo
+                  : publicPaths.assets.user_placeholder
+              } catch {
+                return publicPaths.assets.user_placeholder
+              }
+            })()}
             alt='Profile'
             width={200}
             height={200}
@@ -117,6 +138,12 @@ const SingleProfile = () => {
               >
                 Edit Accesses
               </EmptyButton>
+              <button
+                className='px-10 py-2 bg-red-600 rounded-full text-white font-semibold hover:scale-95 transition-all'
+                onClick={() => setDelete(true)}
+              >
+                Delete
+              </button>
             </div>
           </div>
 
@@ -198,6 +225,16 @@ const SingleProfile = () => {
                 setOpenEditAccess(false)
               }}
             />
+          }
+        />
+      )}
+      {openDelete && profile && user && (
+        <Modal
+          id='delete-profile'
+          isActive={openDelete}
+          onChange={setDelete}
+          body={
+            <DeleteModal userId={user.id} onClose={() => setDelete(false)} />
           }
         />
       )}

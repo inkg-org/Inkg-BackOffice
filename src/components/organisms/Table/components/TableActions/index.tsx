@@ -1,8 +1,7 @@
 'use client'
 
-import { cn } from '@/src/lib/utils/cn'
 import React, { memo, ReactElement, useState } from 'react'
-import { FaSearch, FaTrash /* FaPlus */ } from 'react-icons/fa'
+import { FaSearch } from 'react-icons/fa'
 import Input from '@/src/components/atoms/Input'
 import { ModalBody } from '@/src/components/molecules/Modal/components/ModalBody'
 import { TableEditForm } from '../../types'
@@ -71,8 +70,8 @@ const TableActions = ({
   const [searchText, setSearchText] = useState('')
 
   return (
-    <div className='flex flex-row max-w-full py-4 px-4 items-center gap-4 justify-between'>
-      <div className='flex flex-row w-1/3 py-4 items-center justify-start gap-4'>
+    <div className='flex flex-row max-w-full px-4 items-center gap-4 justify-center'>
+      <div className='flex flex-row w-2/3 py-4 items-center justify-start gap-4'>
         <div className='relative w-full h-[48px]'>
           <FaSearch className='absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 z-10' />
           <Input.TextField
@@ -88,25 +87,6 @@ const TableActions = ({
             placeholder='Buscar'
           />
         </div>
-        {onDelete && (
-          <FaTrash
-            onClick={
-              selectedIds.length > 0
-                ? () => {
-                    setSelectedIds?.((prev) =>
-                      prev.filter((id) => !selectedIds.includes(id))
-                    )
-                    onDelete?.(selectedIds)
-                  }
-                : undefined
-            }
-            className={cn(
-              selectedIds.length > 0
-                ? 'cursor-pointer text-red-400'
-                : 'cursor-not-allowed text-gray-400'
-            )}
-          />
-        )}
 
       </div>
     </div>

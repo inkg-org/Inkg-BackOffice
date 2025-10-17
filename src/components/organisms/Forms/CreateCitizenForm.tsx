@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { createUserSchema, CreateUserSchema } from '@/src/lib/types/createUser'
-import { createUser } from '@/src/lib/adapters/Mutation/createUser'
+import { createUser } from '@/src/lib/adapters/Mutation/Users/createUser'
 import { input, label, select } from './Styles'
 import { states } from '@/src/lib/utils/statesList'
 

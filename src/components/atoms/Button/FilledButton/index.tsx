@@ -23,7 +23,7 @@ const FilledButton = ({
     <button
       className={cn(
         'bg-MainBlue text-white text-sm font-semibold px-4 py-1 rounded-full flex items-center gap-1 transition-colors border-2 border-transparent',
-        'hover:bg-transparent hover:text-MainBlue hover:border-MainBlue hover:opacity-85',
+        ' hover:scale-95 transition-all hover:bg-transparent hover:text-MainBlue hover:border-MainBlue hover:opacity-85',
         isLoading || disabled ? 'opacity-50 cursor-not-allowed' : '',
         className
       )}

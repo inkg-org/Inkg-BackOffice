@@ -23,7 +23,7 @@ const EmptyButton = ({
     <button
       className={cn(
         'hover:bg-MainBlue hover:text-white text-sm font-semibold px-4 py-1 rounded-full flex items-center gap-1 transition-colors border-2 border-transparent',
-        'hover:bg-transparent text-MainBlue border-MainBlue hover:opacity-85',
+        'text-MainBlue border-MainBlue hover:opacity-85 hover:scale-95 transition-all',
         isLoading || disabled ? 'opacity-50 cursor-not-allowed' : '',
         className
       )}

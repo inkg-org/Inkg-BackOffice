@@ -10,7 +10,7 @@ import { CLAN, GENDER, EYE_COLORS, HAIR_COLORS, STATE_CODES } from './type'
 import { updateUserSchema } from '@/src/lib/types/updateUser'
 import useUpdateProfile, {
   UpdateProfileFormData
-} from '@/src/lib/adapters/Mutation/updateUser'
+} from '@/src/lib/adapters/Mutation/Users/updateUser'
 
 export interface EditProfileProps {
   onSuccess?: () => void

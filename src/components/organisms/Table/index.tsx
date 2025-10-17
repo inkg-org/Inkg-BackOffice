@@ -32,8 +32,7 @@ function Table({
   count,
   onPaginate,
   refetch,
-  currentPage,
-  modalLoadingMode = 'eager'
+  currentPage
 }: TableProps) {
   const { colsRender, rowsRender, selectedIds, setSelectedIds } = useTableRenders({
     id,
@@ -44,7 +43,7 @@ function Table({
 
   return (
     <div className='flex flex-col items-end'>
-      <div className='text-gray-700 bg-white shadow-md rounded-xl bg-clip-border w-full'>
+      <div className='text-gray-700 bg-white shadow-md rounded-xl bg-clip-border w-full px-4'>
         <TableLoadingOverlay isActionLoading={isActionLoading} />
         <div className='flex flex-col'>
           <TableActions
